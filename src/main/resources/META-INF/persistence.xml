@@ -3,24 +3,14 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
-
     <persistence-unit name="default" transaction-type="JTA">
-
-        <!-- JDBC Resource - Data Source -->
-        <jta-data-source>jdbc/ParkingLotResources</jta-data-source>
-
-        <!-- Entitățile voastre -->
+        <jta-data-source>jdbc/ParkingLotResource</jta-data-source>
         <class>com.parking.parkinglot.entities.User</class>
         <class>com.parking.parkinglot.entities.Car</class>
-
         <properties>
-            <!-- Schema generation - creează automat tabelele -->
-            <property name="jakarta.persistence.schema-generation.database.action"
-                      value="create-or-extend-tables"/>
 
-            <!-- Afișează SQL-urile în consolă (pentru debugging) -->
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
+            <property name="jakarta.persistence.schema-generation.database.action" value="create-or-extend-tables" />
+
         </properties>
 
     </persistence-unit>
