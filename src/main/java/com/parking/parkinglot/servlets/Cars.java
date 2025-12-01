@@ -12,6 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "Cars", value = "/Cars")
+@ServletSecurity(
+        value = @HttpConstraint(rolesAllowed = {"READ_CARS"}),
+        httpMethodConstraints = {
+                @HttpMethodConstraint(value = "POST", rolesAllowed = {"WRITE_CARS"})
+        }
+)
 public class Cars extends HttpServlet {
 
     @Inject
