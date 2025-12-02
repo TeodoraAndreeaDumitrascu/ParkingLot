@@ -72,4 +72,19 @@ public class UsersBean {
             entityManager.persist(userGroup);
         }
     }
+
+    public Collection<String> findUsernamesByUserIds(Collection<Long> userIds) {
+        // Creează o listă pentru a stoca username-urile
+        List<String> usernames = new ArrayList<>();
+
+        // Iterează prin fiecare ID și găsește username-ul
+        for (Long userId : userIds) {
+            User user = entityManager.find(User.class, userId);
+            if (user != null) {
+                usernames.add(user.getUsername());
+            }
+        }
+
+        return usernames;
+    }
 }
