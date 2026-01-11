@@ -32,12 +32,15 @@
                     </div>
 
                     <div class="col">
+                            <%-- Am corectat calea către servletul de afișare a pozei --%>
                         <img src="${pageContext.request.contextPath}/DisplayCarPhoto?id=${car.id}" width="48"/>
                     </div>
 
                     <c:if test="${pageContext.request.isUserInRole('WRITE_CARS')}">
                         <div class="col">
+                                <%-- Am corectat link-ul către adăugarea pozei --%>
                             <a class="btn btn-secondary btn-sm me-1" href="${pageContext.request.contextPath}/AddCarPhoto?id=${car.id}">Add photo</a>
+                                <%-- Am corectat link-ul către EditCar folosind parametrul ?id= --%>
                             <a class="btn btn-secondary btn-sm" href="${pageContext.request.contextPath}/EditCar?id=${car.id}">Edit Car</a>
                         </div>
                     </c:if>
@@ -46,5 +49,6 @@
         </div>
     </form>
 
+    <%-- Valoarea este acum calculată dinamic în Cars.java (10 - cars.size()) --%>
     <h5>Free parking spots: ${numberOfFreeParkingSpots}</h5>
 </t:pageTemplate>

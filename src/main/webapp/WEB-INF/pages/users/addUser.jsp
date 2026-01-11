@@ -5,6 +5,7 @@
 <t:pageTemplate pageTitle="Add User">
     <h1>Add User</h1>
 
+    <%-- MODIFICARE: Action-ul trebuie să fie /AddUser pentru a găsi servlet-ul mutat în noul pachet --%>
     <form method="POST" action="${pageContext.request.contextPath}/AddUser">
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
@@ -32,6 +33,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Save</button>
+            <%-- MODIFICARE: Calea de Cancel trebuie să ducă la /Users (cu literă mare) --%>
         <a href="${pageContext.request.contextPath}/Users" class="btn btn-secondary">Cancel</a>
     </form>
 </t:pageTemplate>
