@@ -14,15 +14,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-// 1. Am schimbat value la "/Users" (cu litera mare) pentru a fi consistent cu restul aplicatiei
 @WebServlet(name = "Users", value = "/Users")
 @ServletSecurity(
         value = @HttpConstraint(rolesAllowed = {"READ_USERS"}),
         httpMethodConstraints = {
-                @HttpMethodConstraint(value = "POST", rolesAllowed = {"WRITE_USERS"})
+                @HttpMethodConstraint(value = "POST", rolesAllowed = {"READ_USERS"})
         }
 )
 public class Users extends HttpServlet {
@@ -38,10 +38,10 @@ public class Users extends HttpServlet {
         List<UserDto> users = usersBean.findAllUsers();
         request.setAttribute("users", users);
 
-        if (request.isUserInRole("INVOICING")) {
-            request.setAttribute("invoiceUserIds", invoiceBean.getUsersIds());
-            Collection<String> invoiceUsernames = usersBean.findUsernamesByUserIds(invoiceBean.getUsersIds());
+        if (!invoiceBean.getUserIds().isEmpty()) {
+            Collection<String> invoiceUsernames = usersBean.findUsernamesByUserIds(invoiceBean.getUserIds());
             request.setAttribute("invoices", invoiceUsernames);
+            request.setAttribute("invoiceUserIds", invoiceBean.getUserIds());
         }
 
         request.getRequestDispatcher("/WEB-INF/pages/users/users.jsp").forward(request, response);
@@ -50,18 +50,17 @@ public class Users extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String[] userIdsAsString = request.getParameterValues("user_ids");
 
-        if (request.isUserInRole("INVOICING")) {
-            String[] userIdsAsString = request.getParameterValues("user_ids");
+        // Șterge lista curentă
+        invoiceBean.getUserIds().clear();
 
-            if (userIdsAsString != null) {
-                invoiceBean.getUsersIds().clear();
-                for (String userIdString : userIdsAsString) {
-                    invoiceBean.getUsersIds().add(Long.parseLong(userIdString));
-                }
-            } else {
-                invoiceBean.getUsersIds().clear();
+        if (userIdsAsString != null) {
+            List<Long> userIds = new ArrayList<>();
+            for (String userIdAsString : userIdsAsString) {
+                userIds.add(Long.parseLong(userIdAsString));
             }
+            invoiceBean.getUserIds().addAll(userIds);
         }
 
         response.sendRedirect(request.getContextPath() + "/Users");

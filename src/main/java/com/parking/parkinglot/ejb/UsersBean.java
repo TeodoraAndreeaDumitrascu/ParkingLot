@@ -74,17 +74,9 @@ public class UsersBean {
     }
 
     public Collection<String> findUsernamesByUserIds(Collection<Long> userIds) {
-        // Creează o listă pentru a stoca username-urile
-        List<String> usernames = new ArrayList<>();
-
-        // Iterează prin fiecare ID și găsește username-ul
-        for (Long userId : userIds) {
-            User user = entityManager.find(User.class, userId);
-            if (user != null) {
-                usernames.add(user.getUsername());
-            }
-        }
-
-        return usernames;
+        TypedQuery<String> query = entityManager.createQuery(
+                "SELECT u.username FROM User u WHERE u.id IN :userIds", String.class);
+        query.setParameter("userIds", userIds);
+        return query.getResultList();
     }
 }

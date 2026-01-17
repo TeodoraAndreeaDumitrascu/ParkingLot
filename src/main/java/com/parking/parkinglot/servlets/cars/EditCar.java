@@ -6,6 +6,9 @@ import com.parking.parkinglot.ejb.CarsBean;
 import com.parking.parkinglot.ejb.UsersBean;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.HttpConstraint;
+import jakarta.servlet.annotation.HttpMethodConstraint;
+import jakarta.servlet.annotation.ServletSecurity;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +16,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "EditCar", value = "/cars/edit")
+@WebServlet(name = "EditCar", value = "/EditCar")
+@ServletSecurity(
+        value = @HttpConstraint(rolesAllowed = {"WRITE_CARS"}),
+        httpMethodConstraints = {
+                @HttpMethodConstraint(value = "GET", rolesAllowed = {"WRITE_CARS"}),
+                @HttpMethodConstraint(value = "POST", rolesAllowed = {"WRITE_CARS"})
+        }
+)
 public class EditCar extends HttpServlet {
     @Inject
     UsersBean usersBean;
@@ -32,11 +42,10 @@ public class EditCar extends HttpServlet {
             CarDto car = carsBean.findById(carId);
             request.setAttribute("car", car);
 
-            // Calea este acum in folderul /cars/
             request.getRequestDispatcher("/WEB-INF/pages/cars/editCar.jsp").forward(request, response);
         } catch (Exception ex) {
             // Daca ID-ul lipseste sau e gresit, mergem inapoi la lista
-            response.sendRedirect(request.getContextPath() + "/cars");
+            response.sendRedirect(request.getContextPath() + "/Cars");
         }
     }
 
@@ -52,6 +61,6 @@ public class EditCar extends HttpServlet {
         carsBean.updateCar(carId, licensePlate, parkingSpot, userId);
 
         // Ne intoarcem la lista de masini
-        response.sendRedirect(request.getContextPath() + "/cars");
+        response.sendRedirect(request.getContextPath() + "/Cars");
     }
 }

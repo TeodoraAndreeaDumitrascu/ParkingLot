@@ -1,6 +1,5 @@
 package com.parking.parkinglot.ejb;
 
-
 import jakarta.ejb.Stateful;
 import jakarta.enterprise.context.SessionScoped;
 
@@ -11,11 +10,13 @@ import java.util.Set;
 @Stateful
 @SessionScoped
 public class InvoiceBean implements Serializable {
-    Set<Long> usersIds=new HashSet<>();
-    public Set<Long> getUsersIds() {
-        return usersIds;
+    Set<Long> userIds = new HashSet<>();
+
+    public Set<Long> getUserIds() {
+        return userIds;
     }
-    public void setUsersIds(Set<Long> usersIds) {
-        this.usersIds = usersIds;
+
+    public void setUserIds(Set<Long> userIds) {
+        this.userIds = userIds;
     }
 }
